@@ -1,5 +1,5 @@
 {
-  "name": "daily_meme",
+  "name": "memeoclock",
   "module": "src/index.ts",
   "type": "module",
   "private": true,
