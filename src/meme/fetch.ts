@@ -11,7 +11,6 @@ type Meme = {
 
 export function hasSeen(id: string): boolean {
   const row = db.query("SELECT id FROM seen_memes WHERE id = ?").get(id);
-
   return !!row;
 }
 
@@ -32,33 +31,33 @@ const SUBS = [
 ];
 
 export async function fetchMeme(): Promise<Meme> {
+  let fallback: any = null;
+
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const sub = SUBS[Math.floor(Math.random() * SUBS.length)];
 
-      const res = await axios.get(
-        `https://www.reddit.com/r/${sub}/hot.json?limit=30`,
-        {
-          headers: {
-            "User-Agent": "memeOclock/1.0",
-          },
-        },
-      );
+      const res = await axios.get(`https://meme-api.com/gimme/${sub}/20`);
 
-      const posts = res.data?.data?.children ?? [];
+      const memes = res.data?.memes ?? [];
 
-      const valid = posts.filter(
-        (p: any) =>
-          p?.data &&
-          !p.data.over_18 &&
-          p.data.post_hint === "image" &&
-          p.data.ups > 100,
+      const valid = memes.filter(
+        (m: any) =>
+          !m.nsfw &&
+          m.url &&
+          (m.url.endsWith(".jpg") ||
+            m.url.endsWith(".png") ||
+            m.url.endsWith(".jpeg")) &&
+          m.ups > 100,
       );
 
       if (!valid.length) continue;
 
-      for (const post of valid) {
-        const id = post.data.id;
+      // save one fallback (in case all are seen)
+      if (!fallback) fallback = valid[0];
+
+      for (const meme of valid) {
+        const id = meme.postLink;
 
         if (!id || hasSeen(id)) continue;
 
@@ -66,17 +65,30 @@ export async function fetchMeme(): Promise<Meme> {
 
         return {
           id,
-          title: post.data.title,
-          url: post.data.url,
-          postLink: `https://www.reddit.com${post.data.permalink}`,
-          subreddit: post.data.subreddit,
+          title: meme.title,
+          url: meme.url,
+          postLink: meme.postLink,
+          subreddit: meme.subreddit,
         };
       }
     } catch (err) {
-      console.error("Reddit fetch failed, retrying...", err);
+      console.error("Meme API failed, retrying...", err);
       continue;
     }
   }
 
-  throw new Error("No new meme found 😭");
+  // ✅ fallback if all memes seen
+  if (fallback) {
+    console.warn("⚠️ Sending repeated meme (fallback)");
+
+    return {
+      id: fallback.postLink,
+      title: fallback.title,
+      url: fallback.url,
+      postLink: fallback.postLink,
+      subreddit: fallback.subreddit,
+    };
+  }
+
+  throw new Error("No meme found at all");
 }

@@ -15,7 +15,7 @@ export class SetupMemeCommand extends Command {
           .setDescription("Setup current channel as the meme channel"),
       {
         // ...(process.env.PROD ? { guildIds: [GUILD_ID] } : {}),
-        idHints: ["1501097237432893500"],
+        idHints: ["1501103003745386516"],
       },
     );
   }

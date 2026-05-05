@@ -19,7 +19,7 @@ export class PingCommand extends Command {
           .setDescription("Ping bot to see if it is alive"),
       {
         // ...(process.env.PROD ? { guildIds: [GUILD_ID] } : {}),
-        idHints: ["1501097235004395620"],
+        idHints: ["1501103001245450290"],
       },
     );
   }
