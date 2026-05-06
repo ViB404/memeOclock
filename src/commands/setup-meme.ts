@@ -4,7 +4,7 @@ import { GUILD_ID } from "..";
 
 export class SetupMemeCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
-    super(context, { ...options });
+    super(context, { requiredUserPermissions: ["Administrator"] });
   }
 
   public override registerApplicationCommands(registry: Command.Registry) {

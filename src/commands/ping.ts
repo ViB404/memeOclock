@@ -1,9 +1,6 @@
-import {
-  GuildAuditLogsLimits,
-  isMessageInstance,
-} from "@sapphire/discord.js-utilities";
+import { isMessageInstance } from "@sapphire/discord.js-utilities";
 import { Command } from "@sapphire/framework";
-import { MessageFlags } from "discord.js";
+import { EmbedBuilder, MessageFlags } from "discord.js";
 import { GUILD_ID } from "..";
 
 export class PingCommand extends Command {
@@ -28,20 +25,49 @@ export class PingCommand extends Command {
     interaction: Command.ChatInputCommandInteraction,
   ) {
     const callbackResponse = await interaction.reply({
-      content: `Ping?`,
+      embeds: [
+        new EmbedBuilder().setDescription("🏓 Pinging...").setColor("Yellow"),
+      ],
       withResponse: true,
       flags: MessageFlags.Ephemeral,
     });
+
     const msg = callbackResponse.resource?.message;
 
     if (msg && isMessageInstance(msg)) {
       const diff = msg.createdTimestamp - interaction.createdTimestamp;
+
       const ping = Math.round(this.container.client.ws.ping);
-      return interaction.editReply(
-        `Pong 🏓! (Round trip took: ${diff}ms. Heartbeat: ${ping}ms.)`,
-      );
+
+      const embed = new EmbedBuilder()
+        .setTitle("🏓 Pong!")
+        .addFields(
+          {
+            name: "Round Trip",
+            value: `\`${diff}ms\``,
+            inline: true,
+          },
+          {
+            name: "Heartbeat",
+            value: `\`${ping}ms\``,
+            inline: true,
+          },
+        )
+        .setColor(ping < 100 ? "Green" : ping < 200 ? "Yellow" : "Red")
+        .setTimestamp();
+
+      return interaction.editReply({
+        embeds: [embed],
+      });
     }
 
-    return interaction.editReply("Failed to retrieve ping :(");
+    const failedEmbed = new EmbedBuilder()
+      .setTitle("❌ Failed")
+      .setDescription("Failed to retrieve ping.")
+      .setColor("Red");
+
+    return interaction.editReply({
+      embeds: [failedEmbed],
+    });
   }
 }
