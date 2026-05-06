@@ -1,5 +1,6 @@
 import { Listener, UserError, Identifiers } from "@sapphire/framework";
 import { EmbedBuilder } from "discord.js";
+import { EMOJIS } from "../constants/emojis";
 
 function formatPermissions(error: UserError): string {
   const context = error.context as {
@@ -30,7 +31,7 @@ export class ChatInputCommandDeniedListener extends Listener {
     if (error instanceof UserError) {
       if (error.identifier === Identifiers.PreconditionUserPermissions) {
         const embed = new EmbedBuilder()
-          .setTitle("❌ Missing Permissions")
+          .setTitle(`${EMOJIS.error} Missing Permissions`)
           .setDescription(
             `You are missing the following permissions:\n\n${formatPermissions(error)}`,
           )
@@ -44,7 +45,7 @@ export class ChatInputCommandDeniedListener extends Listener {
 
       if (error.identifier === Identifiers.PreconditionClientPermissions) {
         const embed = new EmbedBuilder()
-          .setTitle("⚠️ Bot Missing Permissions")
+          .setTitle(`${EMOJIS.warning} Bot Missing Permissions`)
           .setDescription(
             `I need the following permissions:\n\n${formatPermissions(error)}`,
           )
@@ -58,7 +59,7 @@ export class ChatInputCommandDeniedListener extends Listener {
     }
 
     const embed = new EmbedBuilder()
-      .setTitle("❌ Command Denied")
+      .setTitle(`${EMOJIS.error} Command Denied`)
       .setDescription("You cannot use this command.")
       .setColor("Red");
 

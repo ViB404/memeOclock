@@ -2,6 +2,7 @@ import { isMessageInstance } from "@sapphire/discord.js-utilities";
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder, MessageFlags } from "discord.js";
 import { GUILD_ID } from "..";
+import { EMOJIS } from "../constants/emojis";
 
 export class PingCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -26,7 +27,9 @@ export class PingCommand extends Command {
   ) {
     const callbackResponse = await interaction.reply({
       embeds: [
-        new EmbedBuilder().setDescription("🏓 Pinging...").setColor("Yellow"),
+        new EmbedBuilder()
+          .setDescription(`${EMOJIS.info} Pinging...`)
+          .setColor("Yellow"),
       ],
       withResponse: true,
       flags: MessageFlags.Ephemeral,
@@ -40,7 +43,7 @@ export class PingCommand extends Command {
       const ping = Math.round(this.container.client.ws.ping);
 
       const embed = new EmbedBuilder()
-        .setTitle("🏓 Pong!")
+        .setTitle(`${EMOJIS.info} Pong`)
         .addFields(
           {
             name: "Round Trip",
@@ -62,7 +65,7 @@ export class PingCommand extends Command {
     }
 
     const failedEmbed = new EmbedBuilder()
-      .setTitle("❌ Failed")
+      .setTitle(`${EMOJIS.error} Failed`)
       .setDescription("Failed to retrieve ping.")
       .setColor("Red");
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { db } from "../database/db";
 
-type Meme = {
+export type Meme = {
   id: string;
   title: string;
   url: string;
@@ -77,7 +77,6 @@ export async function fetchMeme(): Promise<Meme> {
     }
   }
 
-  // ✅ fallback if all memes seen
   if (fallback) {
     console.warn("⚠️ Sending repeated meme (fallback)");
 

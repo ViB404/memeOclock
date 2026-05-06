@@ -1,6 +1,10 @@
 import { Command } from "@sapphire/framework";
 import { db } from "../database/db";
 import { GUILD_ID } from "..";
+import { EmbedBuilder } from "discord.js";
+import { EMOJIS } from "../constants/emojis";
+import { sendMeme } from "../schedule/cron-job";
+import { fetchMeme, type Meme } from "../meme/fetch";
 
 export class SetupMemeCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -40,6 +44,26 @@ export class SetupMemeCommand extends Command {
       [guildId, channelId],
     );
 
-    return interaction.editReply("Meme channel set successfully!");
+    const embed = new EmbedBuilder()
+      .setTitle(`${EMOJIS.success} Meme Channel Configured`)
+      .setDescription(
+        `This channel has been set as the meme channel for this server.`,
+      )
+      .setColor("Green")
+      .addFields({
+        name: "Channel",
+        value: `<#${channelId}>`,
+        inline: true,
+      })
+      .setTimestamp();
+
+    setTimeout(async () => {
+      let meme: Meme = await fetchMeme();
+      await sendMeme(interaction.client, channelId, meme);
+    }, 1000);
+
+    return interaction.editReply({
+      embeds: [embed],
+    });
   }
 }
