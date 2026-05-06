@@ -48,7 +48,7 @@ export async function sendMemeToAll(client: Client) {
 }
 
 export function startMemeCron(client: Client) {
-  cron.schedule("0 * * * *", async () => {
+  cron.schedule("0 */12 * * *", async () => {
     console.log("⏰ Meme cron triggered");
     await sendMemeToAll(client);
   });
