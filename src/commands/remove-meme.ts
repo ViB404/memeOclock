@@ -16,8 +16,8 @@ export class RemoveMemeCommand extends Command {
           .setName("remove-meme")
           .setDescription("Remove the meme channel"),
       {
-        guildIds: [GUILD_ID],
-        // idHints: ["1501103003745386516"],
+        // guildIds: [GUILD_ID],
+        idHints: ["1503376615244169276"],
       },
     );
   }
@@ -32,7 +32,6 @@ export class RemoveMemeCommand extends Command {
     }
 
     const guildId = interaction.guildId;
-    const channelId = interaction.channelId;
 
     const existing = db
       .query(
