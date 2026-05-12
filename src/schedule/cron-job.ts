@@ -1,9 +1,11 @@
-import { Client, EmbedBuilder } from "discord.js";
+import { ButtonStyle, Client, EmbedBuilder } from "discord.js";
 import cron from "node-cron";
 import { fetchMeme, type Meme } from "../meme/fetch";
 import { db } from "../database/db";
 import type { ColorResolvable } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
+import { ButtonBuilder } from "discord.js";
+import { ActionRowBuilder } from "discord.js";
 
 function getRandomColor(): ColorResolvable {
   return `#${Math.floor(Math.random() * 16777215)
@@ -28,7 +30,14 @@ export async function sendMeme(client: Client, channelId: string, meme: Meme) {
       })
       .setTimestamp();
 
-    await channel.send({ embeds: [embed] });
+    const button = new ButtonBuilder()
+      .setLabel("Top.gg")
+      .setURL("https://top.gg/bot/1501095370124693604/vote")
+      .setStyle(ButtonStyle.Link);
+
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+
+    await channel.send({ embeds: [embed], components: [row] });
 
     await new Promise((r) => setTimeout(r, 500));
   } catch (err) {

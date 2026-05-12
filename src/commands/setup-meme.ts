@@ -57,6 +57,58 @@ export class SetupMemeCommand extends Command {
       })
       .setTimestamp();
 
+    const webhookUrl = process.env.DISCORD_INFO_WEBHOOK;
+
+    if (!webhookUrl) return;
+
+    const webhookEmbed = new EmbedBuilder()
+      .setTitle(`✅ Meme Channel Set ${interaction.guild?.name ?? "Unknown"}`)
+      .setDescription(`Guild ID: \`${interaction.guild?.id ?? "Unknown"}\``)
+      .addFields(
+        {
+          name: "👑 Owner ID",
+          value: interaction.guild?.ownerId ?? "Unknown",
+          inline: true,
+        },
+        {
+          name: "📚 Channels",
+          value: interaction.guild?.channels.cache.size.toString() ?? "Unknown",
+          inline: true,
+        },
+        {
+          name: "👥 Members",
+          value: interaction.guild?.memberCount.toString() ?? "Unknown",
+          inline: true,
+        },
+        {
+          name: "📅 Joined At",
+          value: interaction.guild?.joinedAt?.toISOString() ?? "Unknown",
+        },
+      )
+      .setColor("Green")
+      .setTimestamp();
+
+    fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        embeds: [webhookEmbed.toJSON()],
+      }),
+    })
+      .then(() =>
+        console.log(
+          `✅ Sent webhook for ${interaction.guild?.name ?? "Unknown"}`,
+        ),
+      )
+      .catch((error) =>
+        console.error(
+          `❌ Failed webhook for ${interaction.guild?.name ?? "Unknown"}:`,
+          error,
+        ),
+      );
+
     setTimeout(async () => {
       let meme: Meme = await fetchMeme();
       await sendMeme(interaction.client, channelId, meme);

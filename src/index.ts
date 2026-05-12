@@ -18,7 +18,7 @@ const client = new SapphireClient({
 
 client.on("clientReady", async () => {
   // Test send all memes
-  await sendMemeToAll(client);
+  // await sendMemeToAll(client);
   startMemeCron(client);
   console.log(chalk.blue(`Client ready with ${client.user?.tag}`));
   console.log(chalk.green(`Client is ready at ${client.readyAt}`));
