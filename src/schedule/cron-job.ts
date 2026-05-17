@@ -1,11 +1,20 @@
-import { ButtonStyle, Client, EmbedBuilder } from "discord.js";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChannelType,
+  Client,
+  EmbedBuilder,
+  type ColorResolvable,
+} from "discord.js";
+
 import cron from "node-cron";
-import { fetchMeme, type Meme } from "../meme/fetch";
+
 import { db } from "../database/db";
-import type { ColorResolvable } from "discord.js";
+
+import { fetchMeme, type Meme } from "../meme/fetch";
+import { fetchNSFWMeme } from "../meme/fetch-nsfw";
 import { EMOJIS } from "../constants/emojis";
-import { ButtonBuilder } from "discord.js";
-import { ActionRowBuilder } from "discord.js";
 
 function getRandomColor(): ColorResolvable {
   return `#${Math.floor(Math.random() * 16777215)
@@ -13,20 +22,44 @@ function getRandomColor(): ColorResolvable {
     .padStart(6, "0")}`;
 }
 
-export async function sendMeme(client: Client, channelId: string, meme: Meme) {
+export async function sendMeme(
+  client: Client,
+  channelId: string,
+  meme: Meme,
+  nsfw = false,
+) {
   try {
     const channel = await client.channels.fetch(channelId);
 
-    if (!channel?.isSendable()) return;
+    if (
+      !channel ||
+      !channel.isSendable() ||
+      channel.type !== ChannelType.GuildText
+    ) {
+      return;
+    }
+
+    // NSFW safety check
+    if (nsfw && !channel.nsfw) {
+      await channel.send(
+        `${EMOJIS.warning} ${channelId} is not an NSFW channel`,
+      );
+      console.warn(
+        `⚠️ Tried sending NSFW meme to non-NSFW channel: ${channelId}`,
+      );
+      return;
+    }
 
     const embed = new EmbedBuilder()
       .setColor(getRandomColor())
-      .setAuthor({ name: `r/${meme.subreddit}` })
+      .setAuthor({
+        name: `r/${meme.subreddit}`,
+      })
       .setTitle(meme.title.slice(0, 256))
       .setURL(meme.postLink)
       .setImage(meme.url)
       .setFooter({
-        text: `Vote us on top.gg to support us`,
+        text: "Vote us on top.gg to support us",
       })
       .setTimestamp();
 
@@ -37,7 +70,10 @@ export async function sendMeme(client: Client, channelId: string, meme: Meme) {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-    await channel.send({ embeds: [embed], components: [row] });
+    await channel.send({
+      embeds: [embed],
+      components: [row],
+    });
 
     await new Promise((r) => setTimeout(r, 500));
   } catch (err) {
@@ -49,24 +85,64 @@ export async function sendMemeToAll(client: Client) {
   try {
     const meme: Meme = await fetchMeme();
 
-    const rows = db.query("SELECT channel_id FROM meme_channels").all() as {
+    const rows = db
+      .query(
+        `
+      SELECT channel_id
+      FROM meme_channels
+    `,
+      )
+      .all() as {
       channel_id: string;
     }[];
 
     for (const row of rows) {
       try {
-        await sendMeme(client, row.channel_id, meme);
+        await sendMeme(client, row.channel_id, meme, false);
       } catch (err) {
-        console.error("Channel send fail:", row.channel_id, err);
+        console.error("Normal meme send fail:", row.channel_id, err);
       }
     }
   } catch (err) {
-    console.error("Cron meme error:", err);
+    console.error("Normal meme cron error:", err);
+  }
+}
+
+export async function sendNSFWMemeToAll(client: Client) {
+  try {
+    const meme = await fetchNSFWMeme();
+
+    const rows = db
+      .query(
+        `
+      SELECT channel_id
+      FROM nsfw_channels
+      WHERE enabled = 1
+    `,
+      )
+      .all() as {
+      channel_id: string;
+    }[];
+
+    for (const row of rows) {
+      try {
+        await sendMeme(client, row.channel_id, meme, true);
+      } catch (err) {
+        console.error("NSFW meme send fail:", row.channel_id, err);
+      }
+    }
+  } catch (err) {
+    console.error("NSFW meme cron error:", err);
   }
 }
 
 export function startMemeCron(client: Client) {
-  cron.schedule("0 */12 * * *", async () => {
-    await sendMemeToAll(client);
+  let cron_timing = "5 * * * * ";
+  cron.schedule(cron_timing, async () => {
+    console.log("📤 Sending scheduled memes...");
+
+    await Promise.all([sendMemeToAll(client), sendNSFWMemeToAll(client)]);
   });
+
+  console.log("✅ Meme cron jobs started");
 }

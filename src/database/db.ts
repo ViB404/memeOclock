@@ -14,3 +14,11 @@ db.run(`
     id TEXT PRIMARY KEY
   )
 `);
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS nsfw_channels (
+    guild_id TEXT PRIMARY KEY,
+    channel_id TEXT NOT NULL,
+    enabled INTEGER DEFAULT 1
+  )
+`);
