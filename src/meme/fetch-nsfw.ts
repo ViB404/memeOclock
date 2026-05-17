@@ -18,15 +18,17 @@ export function markSeen(id: string) {
   db.run("INSERT OR IGNORE INTO seen_memes (id) VALUES (?)", [id]);
 }
 
-const NSFW_SUBS = [
-  "NSFWMemes",
-  "hentaimemes",
-  "PornhubComments",
-  "HolUp",
-  "rule34memes",
-  "AnimeFunny",
-  "hornyjail",
+export const DARK_SUBS = [
+  "dankmemes",
+  "shitposting",
   "discordVideos",
+  "HolUp",
+  "cursedcomments",
+  "blursedimages",
+  "deepfriedmemes",
+  "surrealmemes",
+  "ComedyNecrophilia",
+  "Unexpected",
 ];
 
 export async function fetchNSFWMeme(): Promise<Meme> {
@@ -34,7 +36,7 @@ export async function fetchNSFWMeme(): Promise<Meme> {
 
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
-      const sub = NSFW_SUBS[Math.floor(Math.random() * NSFW_SUBS.length)];
+      const sub = DARK_SUBS[Math.floor(Math.random() * DARK_SUBS.length)];
 
       const res = await axios.get(`https://meme-api.com/gimme/${sub}/20`);
 
