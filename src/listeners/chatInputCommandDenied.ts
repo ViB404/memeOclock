@@ -8,7 +8,7 @@ function formatPermissions(error: UserError): string {
   };
 
   return context.missing
-    .map((p) => `- ${p.replace(/([A-Z])/g, " $1").trim()}`)
+    .map((p) => `${EMOJIS.arrow} ${p.replace(/([A-Z])/g, " $1").trim()}`)
     .join("\n");
 }
 
@@ -60,7 +60,7 @@ export class ChatInputCommandDeniedListener extends Listener {
 
     const embed = new EmbedBuilder()
       .setTitle(`${EMOJIS.error} Command Denied`)
-      .setDescription("You cannot use this command.")
+      .setDescription(`${EMOJIS.error} You cannot use this command.`)
       .setColor("Red");
 
     return interaction.reply({

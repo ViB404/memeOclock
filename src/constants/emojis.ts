@@ -6,4 +6,5 @@ export const EMOJIS = {
   vote: "<:vote:1501599597951320175>",
   nsfw: "<:nsfw:1505425809651929119>",
   happy: "<a:happy:1505425767629062224>",
+  arrow: "<:blue_arrow:1505560928903762032>",
 } as const;

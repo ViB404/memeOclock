@@ -4,6 +4,7 @@ import {
   ButtonStyle,
   ChannelType,
   Client,
+  DiscordAPIError,
   EmbedBuilder,
   type ColorResolvable,
 } from "discord.js";
@@ -101,6 +102,14 @@ export async function sendMemeToAll(client: Client) {
         await sendMeme(client, row.channel_id, meme, false);
       } catch (err) {
         console.error("Normal meme send fail:", row.channel_id, err);
+        if (err instanceof DiscordAPIError && err.code === 50013) {
+          db.run(
+            `
+            DELETE FROM meme_channels WHERE channel_id = ?
+          `,
+            [row.channel_id],
+          );
+        }
       }
     }
   } catch (err) {
@@ -129,6 +138,14 @@ export async function sendNSFWMemeToAll(client: Client) {
         await sendMeme(client, row.channel_id, meme, true);
       } catch (err) {
         console.error("NSFW meme send fail:", row.channel_id, err);
+        if (err instanceof DiscordAPIError && err.code === 50013) {
+          db.run(
+            `
+            DELETE FROM nsfw_channels WHERE channel_id = ?
+          `,
+            [row.channel_id],
+          );
+        }
       }
     }
   } catch (err) {
@@ -137,7 +154,7 @@ export async function sendNSFWMemeToAll(client: Client) {
 }
 
 export function startMemeCron(client: Client) {
-  let cron_timing = "5 * * * * ";
+  let cron_timing = "0 */12 * * *";
   cron.schedule(cron_timing, async () => {
     console.log("📤 Sending scheduled memes...");
 

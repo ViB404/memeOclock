@@ -6,10 +6,6 @@ import { EmbedBuilder, ChannelType } from "discord.js";
 
 import { EMOJIS } from "../constants/emojis";
 
-import { sendMeme } from "../schedule/cron-job";
-
-import { fetchNSFWMeme, type Meme } from "../meme/fetch-nsfw";
-
 export class SetupNSFWMemeCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
     super(context, {
@@ -31,7 +27,7 @@ export class SetupNSFWMemeCommand extends Command {
               .setRequired(false),
           ),
       {
-        ...(process.env.PROD ? { guildIds: [GUILD_ID] } : {}),
+        // ...(process.env.PROD ? { guildIds: [GUILD_ID] } : {}),
       },
     );
   }
@@ -119,14 +115,58 @@ export class SetupNSFWMemeCommand extends Command {
       .setColor("Green")
       .setTimestamp();
 
-    // Instant test meme
-    try {
-      const meme: Meme = await fetchNSFWMeme();
+    const webhookUrl = process.env.DISCORD_INFO_WEBHOOK;
+    if (!webhookUrl) return;
 
-      await sendMeme(interaction.client, channelId, meme, true);
-    } catch (err) {
-      console.error("Failed to send NSFW test meme:", err);
-    }
+    const webhookEmbed = new EmbedBuilder()
+      .setTitle(
+        `✅ NSFW Meme Channel Configured ${interaction.guild?.name ?? "Unknown"}`,
+      )
+      .setDescription(`Guild ID: \`${interaction.guild?.id ?? "Unknown"}\``)
+      .addFields(
+        {
+          name: "👑 Owner ID",
+          value: interaction.guild?.ownerId ?? "Unknown",
+          inline: true,
+        },
+        {
+          name: "📚 Channels",
+          value: interaction.guild?.channels.cache.size.toString() ?? "Unknown",
+          inline: true,
+        },
+        {
+          name: "👥 Members",
+          value: interaction.guild?.memberCount.toString() ?? "Unknown",
+          inline: true,
+        },
+        {
+          name: "📅 Joined At",
+          value: interaction.guild?.joinedAt?.toISOString() ?? "Unknown",
+        },
+      )
+      .setColor("Green")
+      .setTimestamp();
+
+    fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        embeds: [webhookEmbed.toJSON()],
+      }),
+    })
+      .then(() =>
+        console.log(
+          `✅ Sent webhook for ${interaction.guild?.name ?? "Unknown"}`,
+        ),
+      )
+      .catch((error) =>
+        console.error(
+          `❌ Failed webhook for ${interaction.guild?.name ?? "Unknown"}:`,
+          error,
+        ),
+      );
 
     return interaction.editReply({
       embeds: [embed],

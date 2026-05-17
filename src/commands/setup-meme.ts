@@ -3,8 +3,6 @@ import { db } from "../database/db";
 import { GUILD_ID } from "..";
 import { EmbedBuilder } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
-import { sendMeme } from "../schedule/cron-job";
-import { fetchMeme, type Meme } from "../meme/fetch";
 
 export class SetupMemeCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -30,7 +28,9 @@ export class SetupMemeCommand extends Command {
     await interaction.deferReply({ flags: ["Ephemeral"] });
 
     if (!interaction.inGuild()) {
-      return interaction.editReply("This command can only be used in a guild.");
+      return interaction.editReply(
+        `${EMOJIS.error} This command can only be used in a guild.`,
+      );
     }
 
     const guildId = interaction.guildId;
@@ -108,11 +108,6 @@ export class SetupMemeCommand extends Command {
           error,
         ),
       );
-
-    setTimeout(async () => {
-      let meme: Meme = await fetchMeme();
-      await sendMeme(interaction.client, channelId, meme);
-    }, 1000);
 
     return interaction.editReply({
       embeds: [embed],
