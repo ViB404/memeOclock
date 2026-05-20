@@ -18,17 +18,34 @@ export function markSeen(id: string) {
   db.run("INSERT OR IGNORE INTO seen_memes (id) VALUES (?)", [id]);
 }
 
-export const DARK_SUBS = [
+export const DANK_SUBS = [
   "dankmemes",
   "shitposting",
+  "196",
   "discordVideos",
   "HolUp",
-  "cursedcomments",
-  "blursedimages",
+  "ComedyNecrophilia",
   "deepfriedmemes",
   "surrealmemes",
-  "ComedyNecrophilia",
+  "bonehurtingjuice",
+  "whenthe",
+  "skamtebord",
+
+  "blursedimages",
+  "cursedcomments",
+  "perfectlycutscreams",
   "Unexpected",
+  "AbruptChaos",
+  "memesopdidnotlike",
+
+  "NSFWMemes",
+  "hentaimemes",
+  "PornhubComments",
+  "hornyjail",
+  "anime_irl",
+  "goodanimemes",
+  "ecchi",
+  "funnyhentai",
 ];
 
 export async function fetchNSFWMeme(): Promise<Meme> {
@@ -36,23 +53,23 @@ export async function fetchNSFWMeme(): Promise<Meme> {
 
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
-      const sub = DARK_SUBS[Math.floor(Math.random() * DARK_SUBS.length)];
+      const sub = DANK_SUBS[Math.floor(Math.random() * DANK_SUBS.length)];
 
-      const res = await axios.get(`https://meme-api.com/gimme/${sub}/20`);
+      const res = await axios.get(`https://meme-api.com/gimme/${sub}/10`, {
+        timeout: 10000,
+        headers: {
+          "User-Agent": "MemeOClock/1.0",
+        },
+      });
 
       const memes = res.data?.memes ?? [];
 
       const valid = memes.filter(
         (m: any) =>
-          m.nsfw &&
-          m.url &&
-          !m.spoiler &&
-          (m.url.endsWith(".jpg") ||
-            m.url.endsWith(".png") ||
-            m.url.endsWith(".jpeg") ||
-            m.url.endsWith(".gif")) &&
-          m.ups > 50,
+          m.url && !m.spoiler && /\.(jpg|jpeg|png|gif)(\?.*)?$/i.test(m.url),
       );
+
+      console.log(`[NSFW] ${sub} -> ${valid.length}/${memes.length} valid`);
 
       if (!valid.length) continue;
 
@@ -73,14 +90,17 @@ export async function fetchNSFWMeme(): Promise<Meme> {
           subreddit: meme.subreddit,
         };
       }
-    } catch (err) {
-      console.error("NSFW Meme API failed, retrying...", err);
-      continue;
+    } catch (err: any) {
+      console.error(
+        "[NSFW] API failed:",
+        err?.response?.status,
+        err?.response?.data || err.message,
+      );
     }
   }
 
   if (fallback) {
-    console.warn("⚠️ Sending repeated NSFW meme (fallback)");
+    console.warn("⚠️ Sending repeated NSFW meme");
 
     return {
       id: fallback.postLink,

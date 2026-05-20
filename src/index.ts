@@ -1,7 +1,7 @@
 import { SapphireClient } from "@sapphire/framework";
 import { GatewayIntentBits } from "discord.js";
 import chalk from "chalk";
-import { startMemeCron } from "./schedule/cron-job";
+import { sendNSFWMemeToAll, startMemeCron } from "./schedule/cron-job";
 import { sendMemeToAll } from "./schedule/cron-job";
 
 let DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
@@ -19,6 +19,7 @@ const client = new SapphireClient({
 client.on("clientReady", async () => {
   // Test send all memes
   // await sendMemeToAll(client);
+  // await sendNSFWMemeToAll(client);
   startMemeCron(client);
   console.log(chalk.blue(`Client ready with ${client.user?.tag}`));
   console.log(chalk.green(`Client is ready at ${client.readyAt}`));
