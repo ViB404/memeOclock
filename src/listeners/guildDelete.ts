@@ -18,7 +18,19 @@ export class GuildDeleteListener extends Listener {
 
     if (!webhookUrl) return;
 
-    db.run(`DELETE FROM guilds WHERE id = '${guild.id}'`);
+    db.run(
+      `
+      DELETE FROM nsfw_channels WHERE channel_id = ?
+    `,
+      [guild.id],
+    );
+
+    db.run(
+      `
+      DELETE FROM meme_channels WHERE channel_id = ?
+    `,
+      [guild.id],
+    );
 
     const embed = new EmbedBuilder()
       .setTitle(`❌ Left ${guild.name}`)
