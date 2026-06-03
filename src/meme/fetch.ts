@@ -28,6 +28,9 @@ const SUBS = [
   "MemeEconomy",
   "HistoryMemes",
   "ProgrammerHumor",
+  "shitposting",
+  "HolUp",
+  "cursedcomments",
 ];
 
 export async function fetchMeme(): Promise<Meme> {
