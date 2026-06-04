@@ -1,13 +1,6 @@
 import axios from "axios";
 import { db } from "../database/db";
-
-export type Meme = {
-  id: string;
-  title: string;
-  url: string;
-  postLink: string;
-  subreddit: string;
-};
+import type { Meme } from "../type";
 
 export function hasSeen(id: string): boolean {
   const row = db.query("SELECT id FROM seen_memes WHERE id = ?").get(id);
@@ -60,7 +53,7 @@ export async function fetchMeme(): Promise<Meme> {
       if (!fallback) fallback = valid[0];
 
       for (const meme of valid) {
-        const id = meme.postLink;
+        const id = meme.postLink.split("/").pop();
 
         if (!id || hasSeen(id)) continue;
 

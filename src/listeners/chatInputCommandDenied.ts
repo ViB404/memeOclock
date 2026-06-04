@@ -1,6 +1,7 @@
 import { Listener, UserError, Identifiers } from "@sapphire/framework";
 import { EmbedBuilder } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
+import { MessageFlags } from "discord.js";
 
 function formatPermissions(error: UserError): string {
   const context = error.context as {
@@ -39,7 +40,7 @@ export class ChatInputCommandDeniedListener extends Listener {
 
         return interaction.reply({
           embeds: [embed],
-          flags: ["Ephemeral"],
+          flags: MessageFlags.Ephemeral,
         });
       }
 
@@ -53,7 +54,7 @@ export class ChatInputCommandDeniedListener extends Listener {
 
         return interaction.reply({
           embeds: [embed],
-          flags: ["Ephemeral"],
+          flags: MessageFlags.Ephemeral,
         });
       }
     }
@@ -65,7 +66,7 @@ export class ChatInputCommandDeniedListener extends Listener {
 
     return interaction.reply({
       embeds: [embed],
-      flags: ["Ephemeral"],
+      flags: MessageFlags.Ephemeral,
     });
   }
 }

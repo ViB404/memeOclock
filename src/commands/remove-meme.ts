@@ -1,6 +1,6 @@
 import { Command } from "@sapphire/framework";
 import { db } from "../database/db";
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, MessageFlags } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
 import { GUILD_ID } from "..";
 
@@ -25,7 +25,7 @@ export class RemoveMemeCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    await interaction.deferReply({ flags: ["Ephemeral"] });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     if (!interaction.inGuild()) {
       return interaction.editReply("This command can only be used in a guild.");

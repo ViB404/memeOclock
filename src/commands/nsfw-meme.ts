@@ -36,7 +36,7 @@ export class SetupNSFWMemeCommand extends Command {
     interaction: Command.ChatInputCommandInteraction,
   ) {
     await interaction.deferReply({
-      flags: ["Ephemeral"],
+      flags: MessageFlags.Ephemeral,
     });
 
     if (!interaction.inGuild()) {
