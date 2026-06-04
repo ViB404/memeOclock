@@ -6,6 +6,11 @@ import type { Client } from "discord.js";
 import { fetchNSFWMeme } from "../meme/fetch-nsfw";
 import { sendMeme } from "./sendMeme";
 
+export const dbRowCreation = (meme: Meme, isNsfw: boolean) => {
+  const stmt = `INSERT INTO votes (meme_id, is_nsfw) VALUES ('${meme.id}', ${isNsfw});`;
+  db.run(stmt);
+};
+
 export async function sendNSFWMemeToAll(client: Client) {
   try {
     const meme = await fetchNSFWMeme();
@@ -21,6 +26,8 @@ export async function sendNSFWMemeToAll(client: Client) {
       .all() as {
       channel_id: string;
     }[];
+
+    dbRowCreation(meme, true);
 
     for (const row of rows) {
       try {
@@ -59,6 +66,8 @@ export async function sendMemeToAll(client: Client) {
       .all() as {
       channel_id: string;
     }[];
+
+    dbRowCreation(meme, false);
 
     for (const row of rows) {
       try {

@@ -9,11 +9,6 @@ import type { Meme, VoteButtonGeneration } from "../type";
 import { EMOJIS } from "../constants/emojis";
 import { db } from "../database/db";
 
-export const dbRowCreation = (meme: Meme, isNsfw: boolean) => {
-  const stmt = `INSERT INTO votes (meme_id, is_nsfw) VALUES ('${meme.id}', ${isNsfw});`;
-  db.run(stmt);
-};
-
 export const generateVoteButton = (data: VoteButtonGeneration) => {
   return new ButtonBuilder()
     .setCustomId(`${data.action}:${data.memeId}:${data.expiresAt}`)
@@ -36,8 +31,6 @@ export const topggRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 
 export const generateMemeMessage = (meme: Meme, isNsfw: boolean) => {
   const expiresAt = Date.now() + 12 * 60 * 60 * 1000; // 12h
-
-  dbRowCreation(meme, isNsfw);
 
   const embed = new EmbedBuilder()
     .setColor(getRandomColor())
