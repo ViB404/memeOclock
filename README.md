@@ -48,7 +48,6 @@
 |---|---|
 | 🕐 **`/schedule`** | Admins can set the exact time the daily meme drops (e.g. `9:00 AM`) per server |
 | 🎯 **Subreddit Picker** | Choose which subreddits to pull from - r/memes, r/dankmemes, r/me_irl, and more |
-| 🔥 **Dank Mode** | Pulls exclusively from dank/edgy subreddits for servers that like it spicy |
 | 📆 **Meme of the Week** | Every weekend, the bot crowns the most-reacted meme from the past 7 days |
 | 👍 **Auto Reactions** | Every meme post gets automatic 👍 👎 reaction buttons for instant crowd voting |
 | 🏆 **Leaderboard** | Tracks weekly and all-time top memes ranked by server reactions |

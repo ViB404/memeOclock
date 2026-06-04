@@ -25,7 +25,7 @@ export class SetupMemeCommand extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction,
   ) {
-    await interaction.deferReply({ flags: ["Ephemeral"] });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     if (!interaction.inGuild()) {
       return interaction.editReply(

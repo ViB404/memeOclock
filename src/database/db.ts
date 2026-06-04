@@ -22,3 +22,14 @@ db.run(`
     enabled INTEGER DEFAULT 1
   )
 `);
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS votes (
+    meme_id TEXT PRIMARY KEY,
+    is_nsfw BOOLEAN DEFAULT false,
+    likes INTEGER DEFAULT 0,
+    dislikes INTEGER DEFAULT 0,
+    voters TEXT[] DEFAULT '[]',
+    created_at INTEGER DEFAULT CURRENT_TIMESTAMP
+  )
+`);
