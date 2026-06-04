@@ -42,6 +42,7 @@
 | 💬 **Clean & Quiet** | Minimal, non-intrusive bot behavior - no spam, no noise |
 | 🛠️ **Easy Setup** | Up and running in minutes with a single `.env` configuration |
 | 🔒 **Type-Safe** | Full TypeScript support for maintainable, reliable code |
+| 👍 **Reactions** | Every meme post gets automatic 👍 👎 buttons for instant crowd voting |
 
 ### 🚧 In Development
 | Feature | Description |
@@ -49,7 +50,6 @@
 | 🕐 **`/schedule`** | Admins can set the exact time the daily meme drops (e.g. `9:00 AM`) per server |
 | 🎯 **Subreddit Picker** | Choose which subreddits to pull from - r/memes, r/dankmemes, r/me_irl, and more |
 | 📆 **Meme of the Week** | Every weekend, the bot crowns the most-reacted meme from the past 7 days |
-| 👍 **Auto Reactions** | Every meme post gets automatic 👍 👎 reaction buttons for instant crowd voting |
 | 🏆 **Leaderboard** | Tracks weekly and all-time top memes ranked by server reactions |
 | 🥇 **`/topmeme`** | Instantly surface the highest-rated meme ever posted in the server |
 | 🚫 **Duplicate Detection** | Tracks previously posted memes and skips any repeats automatically |
