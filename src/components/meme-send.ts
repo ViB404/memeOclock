@@ -35,8 +35,7 @@ export const topggRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 );
 
 export const generateMemeMessage = (meme: Meme, isNsfw: boolean) => {
-  // const expiresAt = Date.now() + 12 * 60 * 60 * 1000; // 12h
-  const expiresAt = Date.now() + 20000;
+  const expiresAt = Date.now() + 12 * 60 * 60 * 1000; // 12h
 
   dbRowCreation(meme, isNsfw);
 
