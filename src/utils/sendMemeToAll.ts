@@ -69,12 +69,16 @@ export async function sendMemeToAll(client: Client) {
 
     dbRowCreation(meme, false);
 
+    let errorCodes = [50001, 50013, 10003];
     for (const row of rows) {
       try {
         await sendMeme(client, row.channel_id, meme, false);
       } catch (err) {
         console.error("Normal meme send fail:", row.channel_id, err);
-        if (err instanceof DiscordAPIError && err.code === 50013) {
+        if (
+          err instanceof DiscordAPIError &&
+          errorCodes.includes(Number(err.code))
+        ) {
           db.run(
             `
             DELETE FROM meme_channels WHERE channel_id = ?
