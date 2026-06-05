@@ -10,7 +10,8 @@
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "bun run src/index.ts"
+    "dev": "bun run src/index.ts",
+    "check": "tsc --noEmit && eslint . && bun test"
   },
   "dependencies": {
     "@sapphire/framework": "^5.5.0",

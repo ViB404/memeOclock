@@ -2,7 +2,7 @@ import { Command } from "@sapphire/framework";
 import { db } from "../database/db";
 import { GUILD_ID } from "..";
 
-import { EmbedBuilder, ChannelType } from "discord.js";
+import { EmbedBuilder, ChannelType, MessageFlags } from "discord.js";
 
 import { EMOJIS } from "../constants/emojis";
 

@@ -1,7 +1,7 @@
 import { Command } from "@sapphire/framework";
 import { db } from "../database/db";
 import { GUILD_ID } from "..";
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, MessageFlags } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
 
 export class SetupMemeCommand extends Command {
