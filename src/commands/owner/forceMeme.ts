@@ -9,7 +9,6 @@ import {
 } from "discord.js";
 
 import { DEV_GUILD_ID } from "../../config/owners";
-import { db } from "../../database/db";
 import { EMOJIS } from "../../constants/emojis";
 import { sendMemeToAll, sendNSFWMemeToAll } from "../../utils/sendMemeToAll";
 
@@ -36,15 +35,6 @@ export class ServersCommand extends Command {
                 { name: "meme", value: "meme" },
                 { name: "nsfw", value: "nsfw" },
               ),
-          )
-          .addIntegerOption((option) =>
-            option
-              .setName("time")
-              .setDescription(
-                "Avoid if the meme is already posted in the last hours",
-              )
-              .setMinValue(1)
-              .setMaxValue(12),
           ),
       {
         guildIds: [DEV_GUILD_ID],
@@ -60,7 +50,6 @@ export class ServersCommand extends Command {
     });
 
     const type = interaction.options.getString("type", true);
-    const time = interaction.options.getInteger("time", false);
 
     switch (type) {
       case "meme":

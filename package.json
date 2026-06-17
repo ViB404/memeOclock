@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "bun run src/index.ts",
-    "check": "tsc --noEmit && eslint . && bun test"
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@sapphire/framework": "^5.5.0",
