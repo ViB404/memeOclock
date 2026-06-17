@@ -11,16 +11,7 @@ export function markSeen(id: string) {
   db.run("INSERT OR IGNORE INTO seen_memes (id) VALUES (?)", [id]);
 }
 
-export const NSFW_SUBS = [
-  "blursedimages",
-  "NSFWMemes",
-  "hentaimemes",
-  "PornhubComments",
-  "hornyjail",
-  "anime_irl",
-  "goodanimemes",
-  "funnyhentai",
-];
+export const NSFW_SUBS = ["DirtyMemes", "sexmemes", "AdultMeme"];
 
 export async function fetchNSFWMeme(): Promise<Meme> {
   let fallback: any = null;
