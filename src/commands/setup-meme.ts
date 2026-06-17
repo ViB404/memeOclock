@@ -3,6 +3,7 @@ import { db } from "../database/db";
 import { GUILD_ID } from "..";
 import { EmbedBuilder, MessageFlags } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
+import { getNextMemeTime } from "../utils/getNextMemeTime";
 
 export class SetupMemeCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -44,10 +45,14 @@ export class SetupMemeCommand extends Command {
       [guildId, channelId],
     );
 
+    let timing = getNextMemeTime();
+
     const embed = new EmbedBuilder()
       .setTitle(`${EMOJIS.success} Meme Channel Configured`)
       .setDescription(
-        `This channel has been set as the meme channel for this server.`,
+        `
+This channel has been set as the meme channel for this server.
+- Next meme arrives <t:${timing}:R> • <t:${timing}:f>`,
       )
       .setColor("Green")
       .addFields({

@@ -5,6 +5,7 @@ import { GUILD_ID } from "..";
 import { EmbedBuilder, ChannelType, MessageFlags } from "discord.js";
 
 import { EMOJIS } from "../constants/emojis";
+import { getNextMemeTime } from "../utils/getNextMemeTime";
 
 export class SetupNSFWMemeCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -104,9 +105,16 @@ export class SetupNSFWMemeCommand extends Command {
       [guildId, channelId],
     );
 
+    let timing = getNextMemeTime();
+
     const embed = new EmbedBuilder()
       .setTitle(`${EMOJIS.success} NSFW Meme Channel Configured`)
-      .setDescription(`Automatic NSFW memes enabled for <#${channelId}>`)
+      .setDescription(
+        `
+Automatic NSFW memes enabled for <#${channelId}>
+- Next meme arrives <t:${timing}:R> • <t:${timing}:f>
+        `,
+      )
       .addFields({
         name: `${EMOJIS.nsfw} NSFW`,
         value: "Enabled",
