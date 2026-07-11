@@ -14,12 +14,15 @@
     "check": "tsc --noEmit && eslint . && bun test"
   },
   "dependencies": {
+    "@dstats/discord.js": "^0.1.0",
+    "@dstats/sdk": "^0.0.2",
     "@sapphire/framework": "^5.5.0",
     "@sapphire/plugin-subcommands": "^7.0.1",
     "@sapphire/utilities": "^3.18.2",
     "@types/ms": "^2.1.0",
     "axios": "^1.16.0",
     "chalk": "^5.6.2",
+    "daily_meme": ".",
     "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
     "ms": "^2.1.3",
