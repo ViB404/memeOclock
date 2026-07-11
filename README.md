@@ -10,14 +10,12 @@
 &nbsp;
 <img src="https://img.shields.io/badge/Discord-Bot-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" />
 &nbsp;
-<img src="https://img.shields.io/badge/Reddit-Powered-FF4500?style=for-the-badge&logo=reddit&logoColor=white" alt="Reddit" />
-&nbsp;
 <img src="https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge" alt="License" />
 
 
 <br/>
 
-> **A lightweight Discord bot that delivers a fresh meme to your server every single day - no fluff, just dopamine. 🧠**
+**A lightweight Discord bot that delivers a fresh meme to your server every single day - no fluff, just dopamine. 🧠**
 
 <br/>
 
@@ -38,11 +36,7 @@
 |---|---|
 | 📅 **Daily Memes** | Automatically delivers a fresh meme every day - right on schedule |
 | 📦 **Reddit-Powered** | Pulls trending memes straight from Reddit's best communities |
-| ⚡ **Blazing Fast** | Built on [Bun](https://bun.sh/) - the fastest JS runtime available |
-| 💬 **Clean & Quiet** | Minimal, non-intrusive bot behavior - no spam, no noise |
-| 🛠️ **Easy Setup** | Up and running in minutes with a single `.env` configuration |
-| 🔒 **Type-Safe** | Full TypeScript support for maintainable, reliable code |
-| 👍 **Reactions** | Every meme post gets automatic 👍 👎 buttons for instant crowd voting |
+| 👍 **Reactions** | Global Like and Dislike |
 
 ### 🚧 In Development
 | Feature | Description |
@@ -106,6 +100,7 @@ PROD=true
 DISCORD_INFO_WEBHOOK=your_webhook_url_here
 OWNER_ID=your_discord_user_id
 DEV_GUILD_ID=your_dev_server_id
+DSTATS_API_KEY=for_analytics
 ```
 
 **3. Environment variable reference**
@@ -118,6 +113,7 @@ DEV_GUILD_ID=your_dev_server_id
 | `DISCORD_INFO_WEBHOOK` | ✅ | Webhook URL used to send notifications when key bot events occur |
 | `OWNER_ID` | ✅ | Your Discord user ID - grants access to owner-only commands |
 | `DEV_GUILD_ID` | ✅ | Dev server ID - owner commands are registered here instead of globally |
+| `DSTATS_API_KEY` | ✅ | DStats API Key - For discord bot analytics |
 
 > [!NOTE]
 > Variables marked ⏳ are **reserved for future features** and have no effect right now. You can leave them blank or set placeholder values.
@@ -131,13 +127,13 @@ DEV_GUILD_ID=your_dev_server_id
 
 ## ▶️ Usage
 
-Start the bot with a single command:
+Start the bot with command:
 
 ```bash
 bun run src/index.ts
 ```
 
-Once running, **MemeOClock** will automatically post a fresh meme every day in your configured Discord channel. That's it. Sit back and let the memes roll in. 🎉
+Once running, **MemeOClock** will automatically post a fresh meme every day in your configured Discord channel. That's it.
 
 <br/>
 
