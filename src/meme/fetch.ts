@@ -12,18 +12,14 @@ export function markSeen(id: string) {
 }
 
 const SUBS = [
-  "memes",
   "dankmemes",
-  "wholesomememes",
-  "funny",
-  "me_irl",
-  "AdviceAnimals",
-  "MemeEconomy",
   "HistoryMemes",
   "ProgrammerHumor",
-  "shitposting",
-  "HolUp",
-  "cursedcomments",
+  "2meirl4meirl",
+  "cleanmemes",
+  "TooMeIrlForMeIrl",
+  "terriblefacebookmemes",
+  "MinecraftMemes"
 ];
 
 export async function fetchMeme(): Promise<Meme> {
