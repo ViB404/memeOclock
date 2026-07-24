@@ -45,7 +45,7 @@ export class SetupMemeCommand extends Command {
       [guildId, channelId],
     );
 
-    let timing = getNextMemeTime();
+    const timing = getNextMemeTime();
 
     const embed = new EmbedBuilder()
       .setTitle(`${EMOJIS.success} Meme Channel Configured`)

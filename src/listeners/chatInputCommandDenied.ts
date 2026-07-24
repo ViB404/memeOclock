@@ -1,4 +1,4 @@
-import { Listener, UserError, Identifiers } from "@sapphire/framework";
+import { Listener, UserError, Identifiers, type ChatInputCommandDeniedPayload } from "@sapphire/framework";
 import { EmbedBuilder } from "discord.js";
 import { EMOJIS } from "../constants/emojis";
 import { MessageFlags } from "discord.js";
@@ -24,7 +24,7 @@ export class ChatInputCommandDeniedListener extends Listener {
     });
   }
 
-  public async run(error: UserError, { interaction }: any) {
+  public async run(error: UserError, { interaction }: ChatInputCommandDeniedPayload) {
     if (interaction.replied || interaction.deferred) {
       return;
     }

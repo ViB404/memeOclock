@@ -26,10 +26,17 @@ db.run(`
 db.run(`
   CREATE TABLE IF NOT EXISTS votes (
     meme_id TEXT PRIMARY KEY,
-    is_nsfw BOOLEAN DEFAULT false,
-    likes INTEGER DEFAULT 0,
-    dislikes INTEGER DEFAULT 0,
-    voters TEXT[] DEFAULT '[]',
-    created_at INTEGER DEFAULT CURRENT_TIMESTAMP
+
+    title TEXT NOT NULL,
+    url TEXT NOT NULL,
+    post_link TEXT NOT NULL,
+    subreddit TEXT NOT NULL,
+
+    is_nsfw INTEGER NOT NULL DEFAULT 0,
+    likes INTEGER NOT NULL DEFAULT 0,
+    dislikes INTEGER NOT NULL DEFAULT 0,
+    voters TEXT NOT NULL DEFAULT '[]',
+
+    created_at INTEGER NOT NULL DEFAULT (unixepoch())
   )
 `);

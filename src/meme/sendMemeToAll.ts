@@ -1,16 +1,33 @@
 import { db } from "../database/db";
 import type { Client } from "discord.js";
 import type { Meme } from "../type";
-import { fetchMeme } from "../meme/fetch";
-import { fetchNSFWMeme } from "../meme/fetch-nsfw";
+import { fetchMeme, fetchNSFWMeme } from "./fetch_meme";
 import { sendMeme } from "./sendMeme";
-import { shouldRemoveChannel } from "./shouldRemoveChannel";
+import { shouldRemoveChannel } from "../utils/shouldRemoveChannel";
 
 export const dbRowCreation = (meme: Meme, isNsfw: boolean) => {
-  db.run("INSERT INTO votes (meme_id, is_nsfw) VALUES (?, ?)", [
-    meme.id,
-    isNsfw,
-  ]);
+  db.run(
+    `
+      INSERT INTO votes (
+        meme_id,
+        title,
+        url,
+        post_link,
+        subreddit,
+        is_nsfw
+      )
+      VALUES (?, ?, ?, ?, ?, ?)
+      ON CONFLICT(meme_id) DO NOTHING
+    `,
+    [
+      meme.id,
+      meme.title,
+      meme.url,
+      meme.postLink,
+      meme.subreddit,
+      isNsfw ? 1 : 0,
+    ],
+  );
 };
 
 async function sendToAll(

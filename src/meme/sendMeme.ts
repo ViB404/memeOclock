@@ -1,10 +1,5 @@
-import {
-  ChannelType,
-  PermissionFlagsBits,
-  type Client,
-} from "discord.js";
+import { ChannelType, PermissionFlagsBits, type Client } from "discord.js";
 import type { Meme } from "../type";
-import { EMOJIS } from "../constants/emojis";
 import { generateMemeMessage } from "../components/meme-send";
 
 export async function sendMeme(
@@ -12,6 +7,7 @@ export async function sendMeme(
   channelId: string,
   meme: Meme,
   nsfw = false,
+  weekly = false,
 ) {
   const channel = await client.channels.fetch(channelId);
 
@@ -41,18 +37,11 @@ export async function sendMeme(
     throw new Error("MISSING_PERMISSIONS");
   }
 
-  // NSFW safety check
   if (nsfw && !channel.nsfw) {
-    console.warn(
-      `⚠️ Tried sending NSFW meme to non-NSFW channel: ${channelId}`,
-    );
-
     return;
   }
 
-  const messageData = generateMemeMessage(meme, nsfw);
+  await channel.send(generateMemeMessage(meme, nsfw, weekly));
 
-  await channel.send(messageData);
-
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await Bun.sleep(500);
 }

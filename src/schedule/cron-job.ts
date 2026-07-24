@@ -1,15 +1,21 @@
 import { Client } from "discord.js";
-
 import cron from "node-cron";
-import { sendMemeToAll, sendNSFWMemeToAll } from "../utils/sendMemeToAll";
+
+import { sendMemeToAll, sendNSFWMemeToAll } from "../meme/sendMemeToAll";
+import { sendWeeklyMeme, sendWeeklyNSFWMeme } from "../meme/sendWeeklyMeme";
 
 export function startMemeCron(client: Client) {
-  let cron_timing = "0 */12 * * *";
-  cron.schedule(cron_timing, async () => {
-    console.log("📤 Sending scheduled memes...");
-
-    await Promise.all([sendMemeToAll(client), sendNSFWMemeToAll(client)]);
+  cron.schedule("0 */12 * * *", async () => {
+    await Promise.all([
+      sendMemeToAll(client),
+      sendNSFWMemeToAll(client),
+    ]);
   });
 
-  console.log("✅ Meme cron jobs started");
+  cron.schedule("0 9 * * 0", async () => {
+    await Promise.all([
+      sendWeeklyMeme(client),
+      sendWeeklyNSFWMeme(client),
+    ]);
+  });
 }

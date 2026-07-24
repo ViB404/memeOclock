@@ -3,7 +3,7 @@ import { MessageFlags } from "discord.js";
 
 import { DEV_GUILD_ID } from "../../config/owners";
 import { EMOJIS } from "../../constants/emojis";
-import { sendMemeToAll, sendNSFWMemeToAll } from "../../utils/sendMemeToAll";
+import { sendMemeToAll, sendNSFWMemeToAll } from "../../meme/sendMemeToAll";
 
 export class ServersCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -46,13 +46,13 @@ export class ServersCommand extends Command {
 
     switch (type) {
       case "meme":
-        const sendMeme = await sendMemeToAll(this.container.client);
+        await sendMemeToAll(this.container.client);
         await interaction.editReply({
           content: `${EMOJIS.success} Successfully sent meme to all servers`,
         });
         break;
       case "nsfw":
-        const sendNsfw = await sendNSFWMemeToAll(this.container.client);
+        await sendNSFWMemeToAll(this.container.client);
         await interaction.editReply({
           content: `${EMOJIS.success} Successfully sent NSFW meme to all servers`,
         });

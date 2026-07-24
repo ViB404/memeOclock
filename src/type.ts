@@ -20,3 +20,17 @@ export type VoteButtonGeneration = {
   memeId: string;
   expiresAt: number;
 };
+
+export interface MemeApiResponse {
+  memes: RedditMeme[];
+}
+
+export interface RedditMeme {
+  title: string;
+  url: string;
+  postLink: string;
+  subreddit: string;
+  nsfw: boolean;
+  spoiler: boolean;
+  ups: number;
+}

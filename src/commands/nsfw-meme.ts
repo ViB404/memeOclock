@@ -105,7 +105,7 @@ export class SetupNSFWMemeCommand extends Command {
       [guildId, channelId],
     );
 
-    let timing = getNextMemeTime();
+    const timing = getNextMemeTime();
 
     const embed = new EmbedBuilder()
       .setTitle(`${EMOJIS.success} NSFW Meme Channel Configured`)

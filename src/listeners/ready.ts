@@ -82,7 +82,5 @@ export class ReadyListener extends Listener {
     updatePresence();
 
     interval = setInterval(updatePresence, 60_000);
-
-    this.container.logger.info("Bot's presence is now active");
   }
 }
